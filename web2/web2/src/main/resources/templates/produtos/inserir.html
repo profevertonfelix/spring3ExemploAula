@@ -1,0 +1,17 @@
+<DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+<body>
+<form method="POST">
+	nome: <input type="text" name="nome" />
+	descricao: <input type="text" name="descricao" />
+	status: <input type="text" name="status"/>
+	Categoria:
+	<select name="categoriaModel" >
+		<option th:each="categoria: ${categorias}" 
+		th:value="${categoria.CATEGORIAID}" 
+		th:text="${categoria.nome}"></option>
+	</select>
+	<input type="submit"/>
+</form>
+</body>
+</html>

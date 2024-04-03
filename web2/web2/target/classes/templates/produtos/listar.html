@@ -1,0 +1,12 @@
+<DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+<body>
+	<div th:each="produto: ${produtos}">
+		<p th:text="${produto.nome}"></p>
+		<a th:href="@{/produtos/delete/{id}(id=${produto.ID})}">
+		Deletar
+		</a>
+
+	</div>
+</body>
+</html>
