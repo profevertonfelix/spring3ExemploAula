@@ -25,8 +25,8 @@ public class CategoriasModel implements Serializable{
 	public int getCATEGORIAID() {
 		return CATEGORIAID;
 	}
-	public void setCATEGORIAID(int iD) {
-		CATEGORIAID = iD;
+	public void setCATEGORIAID(int CATEGORIAID) {
+		this.CATEGORIAID = CATEGORIAID;
 	}
 	public String getNome() {
 		return nome;

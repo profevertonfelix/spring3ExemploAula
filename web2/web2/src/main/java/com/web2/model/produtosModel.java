@@ -26,14 +26,21 @@ public class produtosModel implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "categoriaID")
-	private CategoriasModel categoriaModel;
+	private CategoriasModel categoriaID;
 	
+	private String imagem;
 	
-	public CategoriasModel getCategoriaModel() {
-		return categoriaModel;
+	public String getImagem() {
+		return imagem;
 	}
-	public void setCategoriaModel(CategoriasModel categoriaModel) {
-		this.categoriaModel = categoriaModel;
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
+	public CategoriasModel getCategoriaID() {
+		return categoriaID;
+	}
+	public void setCategoriaID(CategoriasModel categoriaID) {
+		this.categoriaID = categoriaID;
 	}
 	public int getPRODUTOID() {
 		return PRODUTOID;

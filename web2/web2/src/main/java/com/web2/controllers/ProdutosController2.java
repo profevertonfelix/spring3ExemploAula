@@ -1,5 +1,10 @@
 package com.web2.controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.web2.dto.produtosRecordDto;
@@ -54,12 +62,24 @@ public class ProdutosController2 {
 	@PostMapping("/insert")
 	public String salvarProduto
 		(@ModelAttribute @Valid produtosRecordDto produtosDTO,
-				BindingResult result){
+				BindingResult result, @RequestParam("file") MultipartFile imagem){
 		if(result.hasErrors()) {
 			return "redirect:/produtos/insert";
 		}
 		var produtosModel = new produtosModel();
 		BeanUtils.copyProperties(produtosDTO, produtosModel);
+		try {
+			if(!imagem.isEmpty()) {
+				byte[] bytes = imagem.getBytes();
+				Path caminho = Paths.get
+						("./src/main/resources/static/img/"+imagem.getOriginalFilename());
+				Files.write(caminho, bytes);
+				produtosModel.setImagem(imagem.getOriginalFilename());
+			}
+		}catch(IOException e) {
+			System.out.println("Erro na imagem");
+		}
+		
 		repositorio.save(produtosModel);
 		return "redirect:/produtos/list";
 	}
@@ -69,6 +89,26 @@ public class ProdutosController2 {
 		List<produtosModel> produtos = 	repositorio.findAll();
 		mv.addObject("produtos", produtos);
 		return mv;
+	}
+	@PostMapping("/list")
+	public ModelAndView listarProdutosSRC
+	(@RequestParam("src") String src){
+		ModelAndView mv = new ModelAndView("produtos/listar");
+		List<produtosModel> produtos = 
+				repositorio.findProdutosByNomeLike("%"+src+"%");
+		mv.addObject("produtos", produtos);
+		return mv;
+	}
+	
+	@GetMapping("/imagem/{imagem}")
+	@ResponseBody
+	public byte[] mostraImagem(@PathVariable("imagem") String imagem) throws IOException {
+		File nomeArquivo = 
+				new File("./src/main/resources/static/img/"+imagem);
+		if(imagem != null || imagem.trim().length()>0) {
+			return Files.readAllBytes(nomeArquivo.toPath());
+		}
+		return null;
 	}
 	
 	@GetMapping("/delete/{id}")
