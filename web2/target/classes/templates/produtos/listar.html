@@ -1,0 +1,22 @@
+<DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+<body>
+<form method="post">
+Buscar:
+<input type="text" name="src"/>
+<button type="submit">Enviar</button>
+</form>
+
+<th:block th:include="produtos/msg"></th:block>
+
+	<div th:each="produto: ${produtos}">
+		<p th:text="${produto.nome}"></p>
+				<p th:text="${produto.categoriaID}"></p>
+		<img th:src="@{/produtos/imagem/{imagem}(imagem=${produto.imagem})}" width="200"/>
+		<a th:href="@{/produtos/delete/{id}(id=${produto.PRODUTOID})}">
+		Deletar
+		</a>
+
+	</div>
+</body>
+</html>
